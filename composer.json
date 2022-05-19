@@ -1,0 +1,15 @@
+{
+  "name": "jzh/jwt",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "firebase/php-jwt": "^6.1",
+    "psr/container": "^v1",
+    "illuminate/redis": "^8.83"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jzh\\Jwt\\": "src"
+    }
+  }
+}
