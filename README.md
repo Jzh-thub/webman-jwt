@@ -198,7 +198,7 @@ $info = \Jzh\Jwt\Facade\JWT::guard('admin')->refreshToken();
 > 5、获令牌有效期剩余时长
 
 ```php
-$exp = Tinywan\Jwt\JwtToken::getTokenExp();
+$exp = \Jzh\Jwt\Facade\JWT::getTokenExp();
 
 // 获取admin用户
 $exp = \Jzh\Jwt\Facade\JWT::guard('admin')->getTokenExp();
@@ -208,7 +208,7 @@ $exp = \Jzh\Jwt\Facade\JWT::guard('admin')->getTokenExp();
 
 ```php
 // 返回 jwt 解密的信息
-$info = Tinywan\Jwt\JwtToken::verify();
+$info = \Jzh\Jwt\Facade\JWT::verify();
 
 // 获取admin用户
 $info = \Jzh\Jwt\Facade\JWT::guard('admin')->verify();
