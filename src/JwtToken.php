@@ -110,7 +110,7 @@ class JwtToken implements JwtInterface
         $token               = self::makeToken($tokenPayload, $secretKey);
         //获取主键
         $idKey = $this->config['guard'][$this->guard]['key'];
-        RedisHandler::setAccessToken($tokenPayload['extend'][$idKey], $this->guard, $this->config['jwt']['redis_pre'], $refreshToken, $token, $tokenPayload['exp']);
+        RedisHandler::setAccessToken($tokenPayload['extend'][$idKey], $this->guard, $this->config['jwt']['redis_pre'], $refreshToken, $token, $this->config['jwt']['access_exp']);
         return ['access_token' => $token, 'access_token_expires' => $tokenPayload['exp']];
     }
 
