@@ -120,9 +120,9 @@ $token = \Jzh\Jwt\Facade\JWT::guard('admin')->generateToken($user);
 ```json
 {
     "token_type": "Bearer",
-    "expires_in": 36000,
+    "access_token_expires": 36000,
     "access_token": "eyJ0eXAiOiJAUR-Gqtnk9LUPO8IDrLK7tjCwQZ7CI...",
-    "refresh_expires_in":78000,
+    "refresh_token_expires":78000,
     "refresh_token": "eyJ0eXAiOiJIEGkKprvcccccQvsTJaOyNy8yweZc...",
 }
 ```
@@ -132,10 +132,10 @@ $token = \Jzh\Jwt\Facade\JWT::guard('admin')->generateToken($user);
 | 参数|类型|描述示|例值|
 |:---|:---|:---|:---|
 |token_type | string| Token 类型 | Bearer |
-|expires_in | int| Token凭证有效时间，单位：秒 | 36000 |
+|access_token_expires | int| Token凭证有效时间，单位：秒 | 36000 |
 |access_token | string| 访问凭证 | webman |
 |refresh_expires_in | int| 刷新Token凭证有效时间，单位：秒 | 720000 |
-|refresh_token | string| 刷新访问凭证 | webman |
+|refresh_token_expires | string| 刷新访问凭证 | webman |
 
 ### 退出登录
 ```php
@@ -187,7 +187,7 @@ $uid = \Jzh\Jwt\Facade\JWT::guard('admin')->getExtendVal('uid');
 ```php
 $info = \Jzh\Jwt\Facade\JWT::refreshToken();
 {
-    "expires_in": 36000,
+    "access_token_expires": 36000,
     "access_token": "eyJ0eXAiOiJAUR-Gqtnk9LUPO8IDrLK7tjCwQZ7CI...",
 }
 

@@ -79,17 +79,17 @@ class JwtToken implements JwtInterface
         $secretKey = self::getPrivateKey();
         $token     = [
             'token_type'   => 'Bearer',
-            'expires_in'   => $this->config['jwt']['access_exp'],
+            'access_token_expires'   => $this->config['jwt']['access_exp'],
             'access_token' => self::makeToken($payload['accessPayload'], $secretKey)
         ];
         if (!isset($this->config['jwt']['refresh_disable']) || (isset($this->config['jwt']['refresh_disable']) && $this->config['jwt']['refresh_disable'] === false)) {
             $refreshSecretKey            = self::getPrivateKey(self::REFRESH_TOKEN);
             $token['refresh_token']      = self::makeToken($payload['refreshPayload'], $refreshSecretKey);
-            $token['refresh_expires_in'] = $this->config['jwt']['refresh_exp'];
+            $token['refresh_token_expires'] = $this->config['jwt']['refresh_exp'];
         }
         //获取主键
         $idKey = $this->config['guard'][$this->guard]['key'];
-        RedisHandler::generateToken($extend[$idKey], $this->guard, $this->config['jwt']['redis_pre'], $this->config['guard'][$this->guard]['limit'], $this->config['jwt']['refresh_disable'], $token['access_token'], $token['expires_in'], $token['refresh_token'] ?? null, $token['refresh_expires_in'] ?? null);
+        RedisHandler::generateToken($extend[$idKey], $this->guard, $this->config['jwt']['redis_pre'], $this->config['guard'][$this->guard]['limit'], $this->config['jwt']['refresh_disable'], $token['access_token'], $token['access_token_expires'], $token['refresh_token'] ?? null, $token['refresh_token_expires'] ?? null);
         return $token;
     }
 
@@ -108,7 +108,7 @@ class JwtToken implements JwtInterface
         //获取主键
         $idKey = $this->config['guard'][$this->guard]['key'];
         RedisHandler::setAccessToken($tokenPayload['extend'][$idKey], $this->guard, $this->config['jwt']['redis_pre'], $refreshToken, $token, $tokenPayload['exp']);
-        return ['access_token' => $token, 'expires_in' => $tokenPayload['exp']];
+        return ['access_token' => $token, 'access_token_expires' => $tokenPayload['exp']];
     }
 
     /**

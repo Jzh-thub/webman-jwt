@@ -22,24 +22,24 @@ class RedisHandler
      * @param      $maxLimit
      * @param      $refresh_disable
      * @param      $access_token
-     * @param      $expires_in
+     * @param      $access_token_expires
      * @param null $refresh_token
-     * @param null $refresh_expires_in
+     * @param null $refresh_token_expires
      */
-    public static function generateToken(int $id, $guard, $redis_pre, $maxLimit, $refresh_disable, $access_token, $expires_in, $refresh_token = null, $refresh_expires_in = null): void
+    public static function generateToken(int $id, $guard, $redis_pre, $maxLimit, $refresh_disable, $access_token, $access_token_expires, $refresh_token = null, $refresh_token_expires = null): void
     {
         $cacheKey    = $redis_pre . '_' . $guard . '_' . $id;
         $clientType  = request()->input('client_type', 'web1');
         $defaultList = [
             'accessToken'     => $access_token,
-            'accessExp'       => $expires_in,
+            'accessExp'       => $access_token_expires,
             'clientType'      => $clientType,
             'accessTime'      => time(),
             'refresh_disable' => $refresh_disable
         ];
         if (!$refresh_disable) {
             $defaultList['refreshToken'] = $refresh_token;
-            $defaultList['refreshExp']   = $refresh_expires_in;
+            $defaultList['refreshExp']   = $refresh_token_expires;
             $defaultList['refreshTime']  = time();
         }
         $redisList = Redis::get($cacheKey);
