@@ -48,7 +48,7 @@ class JwtToken implements JwtInterface
      * @param string $guard
      * @return $this
      */
-    public  function guard(string $guard = 'user'): JwtToken
+    public function guard(string $guard = 'user'): JwtToken
     {
         $this->guard = $guard;
         return $this;
@@ -78,18 +78,21 @@ class JwtToken implements JwtInterface
         $payload   = self::generatePayload($extend);
         $secretKey = self::getPrivateKey();
         $token     = [
-            'token_type'   => 'Bearer',
-            'access_token_expires'   => $this->config['jwt']['access_exp'],
-            'access_token' => self::makeToken($payload['accessPayload'], $secretKey)
+            'token_type'           => 'Bearer',
+            'access_token_in'      => $this->config['jwt']['access_exp'],
+            'access_token_expires' => bcadd((string)$this->config['jwt']['access_exp'], (string)time(), 0),
+            'access_token'         => self::makeToken($payload['accessPayload'], $secretKey)
         ];
         if (!isset($this->config['jwt']['refresh_disable']) || (isset($this->config['jwt']['refresh_disable']) && $this->config['jwt']['refresh_disable'] === false)) {
-            $refreshSecretKey            = self::getPrivateKey(self::REFRESH_TOKEN);
-            $token['refresh_token']      = self::makeToken($payload['refreshPayload'], $refreshSecretKey);
-            $token['refresh_token_expires'] = $this->config['jwt']['refresh_exp'];
+            $refreshSecretKey               = self::getPrivateKey(self::REFRESH_TOKEN);
+            $token['refresh_token']         = self::makeToken($payload['refreshPayload'], $refreshSecretKey);
+            $token['refresh_token_in']      = $this->config['jwt']['refresh_exp'];
+            $token['refresh_token_expires'] = bcadd((string)$this->config['jwt']['refresh_exp'], (string)time(), 0);
+
         }
         //获取主键
         $idKey = $this->config['guard'][$this->guard]['key'];
-        RedisHandler::generateToken($extend[$idKey], $this->guard, $this->config['jwt']['redis_pre'], $this->config['guard'][$this->guard]['limit'], $this->config['jwt']['refresh_disable'], $token['access_token'], $token['access_token_expires'], $token['refresh_token'] ?? null, $token['refresh_token_expires'] ?? null);
+        RedisHandler::generateToken($extend[$idKey], $this->guard, $this->config['jwt']['redis_pre'], $this->config['guard'][$this->guard]['limit'], $this->config['jwt']['refresh_disable'], $token['access_token'], $token['access_token_in'], $token['refresh_token'] ?? null, $token['refresh_token_in'] ?? null);
         return $token;
     }
 

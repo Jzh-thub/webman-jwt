@@ -29,7 +29,7 @@ class RedisHandler
     public static function generateToken(int $id, $guard, $redis_pre, $maxLimit, $refresh_disable, $access_token, $access_token_expires, $refresh_token = null, $refresh_token_expires = null): void
     {
         $cacheKey    = $redis_pre . '_' . $guard . '_' . $id;
-        $clientType  = request()->input('client_type', 'web1');
+        $clientType  = request()->input('client_type', 'web');
         $defaultList = [
             'accessToken'     => $access_token,
             'accessExp'       => $access_token_expires,
