@@ -143,13 +143,14 @@ class RedisHandler
             $redisList = json_decode($redisList, true);
             $refresh   = false;
             foreach ($redisList as $key => $value) {
+                if (($value['accessTime'] + $value['accessExp']) < time()) {
+                    $redisList[$key]                = $value;
+                    $redisList[$key]['accessToken'] = '';
+                    $refresh                        = true;
+                }
                 if (!$value['refresh_disable'] && ($value['refreshTime'] + $value['refreshExp']) < time()) {
                     unset($redisList[$key]);
                     $refresh = true;
-                }
-                if (($value['accessTime'] + $value['accessExp']) < time()) {
-                    $redisList[$key]['accessToken'] = '';
-                    $refresh                        = true;
                 }
             }
             $redisList = array_values($redisList);
